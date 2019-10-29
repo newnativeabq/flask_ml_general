@@ -16,21 +16,19 @@ The root route path is a landing page for API usage instructions.  Apparently th
 
 You really need to manually create the instance folder to get logs in development.  By default, logs are saved to instance/logs/debug.log for safety reasons (don't accidentally want to push sensitive information).  Override the log save path in config.  Note that in heroku, those writes will not persist and you'll need to log to an external service (not currently supported) in production.
 
+### Logging
+
+Logging is enabled by default at the INFO level.  Logs are written to instance/logs/debug.log.  You can configure this or write to external source, console by modifying basic config.
+
+You can change this to DEBUG by modifying the following line:
+
+> logging.basicConfig(filename=app.config['LOGFILE'], level=logging.INFO) **logging.INFO to logging.DEBUG**
+
 ## TODO
 
 ### Generalize load_file
 
 > Right now, load_file only handled pickled files.  For Keras h5 files, keras.models import load_model needs to be implemented.  For JSON (models can be saved in JSON format as well), the file can be returned as a path (example useage: to keras.models.model_from_json)
-
-### Logging
-
-> Add two-level logging layer for 'debug-full' and 'production' logging.  Add logging at each of the following actions:
-
-* Instantiating all classes
-
-* Loading files
-
-* All checks, transforms, and predictions
 
 ### Better Landing Page
 

@@ -81,6 +81,7 @@ def create_app(test_config=None):
     #############
     ###Logging###
     #############
+    # Change logging.INFO to logging.DEBUG to get full logs.  Will be a crapload of information.
     logging.basicConfig(filename=app.config['LOGFILE'], level=logging.INFO)
     logging.getLogger('flask_cors').level = logging.INFO
 
