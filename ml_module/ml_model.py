@@ -52,9 +52,13 @@ self.predict
 # Path and File Libraries
 import os
 import pickle
+
 # Data Transformation Libraries
 import pandas as pd
 import numpy as np
+
+# Logging
+import logging
 
 # Initialize parameters and dependencies from __init__.py
 from ml_module import params
@@ -70,6 +74,8 @@ class Predictor():
     def __init__(self, model=None, vectorizer=None):
         self.estimator = Model()
         self.vectorizer = Vectorizer()
+        self.logger = logging.getLogger(__name__+'.predictor')
+        self.logger.info('Created instance of Predictor(model={}, vectorizer={})'.format(model, vectorizer))
 
     def transform(self, raw_input, verbose=False):
         self.raw_input = raw_input
@@ -78,6 +84,7 @@ class Predictor():
         if verbose:
             print(vinput)
 
+        self.logger.info('Ran transform.  Raw_Input: {} \n Vectorized_Input: {}'.format(raw_input, vinput))
         return vinput
 
     def predict(self, user_input=None, **kwargs):
@@ -91,11 +98,16 @@ class Predictor():
         """
         if self.data_available(user_input):
             if user_input:
+                prediction = None
                 raise NotImplementedError
             else:
+                prediction = None
                 raise NotImplementedError
         else:
+            prediction = None
             raise Error
+
+        self.logger.info('Predictor.predict executed. user_input:{} \n prediction:{}'.format(user_input, prediction))
 
 
     def data_available(self, user_input):
@@ -121,11 +133,15 @@ class Predictor():
 class Model():
     def __init__(self):
         self.estimator = load_file('estimator')
+        self.logger = logging.getLogger(__name__+'.Model')
+        self.logger.info('Model instance created with given estimator')
 
 
 class Vectorizer():
     def __init__(self):
-        pass
+        self.vectorizer = load_file('vectorizer')
+        self.logger = logging.getLogger(__name__+'.Vectorizer')
+        self.logger.info('Vectorizer instance created with given estimator')
 
     def transform(self, input_string):
         raise NotImplementedError
@@ -159,9 +175,13 @@ def get_abs_path(filename, **kwargs):
 
 def load_file(file_key):
     # Load picke file.
+    logger = logging.getLogger(__name__+'.load_file')
+    logger.info('Attempting to load file with key: {}'.format(file_key))
     try:
         with open(get_abs_path(params[file_key]), 'rb') as f:
             opened = pickle.load(f)
         return opened
     except KeyError:
         print('Could not load {}.  Parameter not defined'.format(file_key))
+        logger.info('Could not load {}.  Parameter not defined'.format(file_key))
+        return None

@@ -5,9 +5,6 @@ from flask_caching import Cache
 from decouple import config
 import os
 
-# Import ML Library
-from ml_module import ml_model
-
 # Custom errors
 from errors import InvalidUsage
 
@@ -18,12 +15,8 @@ import logging
 ###Setup###
 ###########
 
-# Initialize Predictor
-predictor = ml_model.Predictor()
-
 # Set database name
 local_db_name = 'database_name.sqlite3'  # Change this or override with config.py file in instance/
-
 
 #########################
 ###Application Factory###
@@ -88,9 +81,16 @@ def create_app(test_config=None):
     #############
     ###Logging###
     #############
-    logging.basicConfig(filename=app.config['LOGFILE'], level=logging.DEBUG)
-    logging.getLogger('flask_cors').level = logging.DEBUG
+    logging.basicConfig(filename=app.config['LOGFILE'], level=logging.INFO)
+    logging.getLogger('flask_cors').level = logging.INFO
 
+    ##############################
+    ###Preload ML Model Library###
+    ##############################
+    from ml_module import ml_model
+
+    # Initialize Predictor
+    predictor = ml_model.Predictor()
 
     ############################
     ###Register Error Handles###
