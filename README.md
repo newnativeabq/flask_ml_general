@@ -6,7 +6,7 @@ A deployable flask application tailored for production machine learning.  Contai
 
 ### Instance Folder
 
-When committed, this repository is set to ignore the instance/ folder.  In that folder should be your config.py file with any sensitive data.  Do not commit config.py with any API keys or database URIs.
+When committed, this repository is set to ignore the instance/ folder.  In that folder should be your config.py (if used) file with any sensitive data.  Do not commit config.py with any API keys or database URIs.  Also in the instance/ folder should be a logs folder.  If nothing, create the following in your local root directory: instance/logs/debug.log.  Otherwise, the application will throw an error that debug.log doesn't exist.
 
 ### Predefined Routes
 
