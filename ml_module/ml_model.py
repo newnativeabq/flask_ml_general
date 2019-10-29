@@ -19,6 +19,34 @@ self.transform
     **Note that the predictor instance will vectorized input each pass.  This can be disabled by commenting
         out 'self.vectorized_input = user_input' in method data_available.
 
+
+Estimator
+---------
+self.transform
+
+    params
+    ------
+    raw_input: str-like
+
+    returns
+    -------
+    vectorized_input: ndarray
+    **Invoke vectorizer.transform and store result.  Try to keep vectorizer stateless or states separate.
+        If you want to store multiple vectorized inputs, enable logging within the vectorizer.
+
+
+self.predict
+    params
+    ------
+    user_input: str_like or ndarray
+    **Predictor class is input aware for testing purposes.  If numpy.ndarray is passed, will predict. Else,
+        will pass through self.vectorizer first.
+
+    returns
+    -------
+    estimator prediction.
+    **Invoke model.predict.  Results not stored, but output response is cached.
+        If you want to store multiple model predictions, enable logging within the model.
 """
 
 # Path and File Libraries
