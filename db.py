@@ -6,7 +6,6 @@ Database
 
 
 import sqlite3
-import pandas
 
 import click
 from flask import current_app, g
