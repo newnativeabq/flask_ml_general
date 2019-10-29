@@ -1,0 +1,6 @@
+click==7.0
+Flask==1.1.1
+Flask_Cors==3.0.8
+python==3.7.8
+python-decouple==3.1
+numpy==1.17
