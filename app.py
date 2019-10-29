@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask import current_app, g
 from flask_cors import CORS
+from flask_caching import Cache
 from decouple import config
 import os
 
@@ -34,13 +35,19 @@ local_db_name = 'database_name.sqlite3'  # Change this or override with config.p
 def create_app(test_config=None):
     # Create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    CORS(app)
     # If environment vairables not set, will default to development expected paths and names
     app.config.from_mapping(
+        DEBUG=config('DEBUG', default=True),  # Make sure to change debug to False in production env
         SECRET_KEY=config('SECRET_KEY', default='dev'),  # CHANGE THIS!!!!
         DATABASE=config('DATABASE_URI', default=os.path.join(app.instance_path, local_db_name)),
         LOGFILE=config('LOGFILE', os.path.join(app.instance_path, 'logs/debug.log')),
+        CACHE_TYPE=config('CACHE_TYPE', 'simple'),  # Configure caching
+        CACHE_DEFAULT_TIMEOUT=config('CACHE_DEFAULT_TIMEOUT', 300), # Long cache times probably ok for ML api
     )
+    # Enable CORS extensions
+    CORS(app)
+    # Enable caching
+    cache = Cache(app)
 
     if test_config is None:
         # Load the instance config, if it exists, when not testing
@@ -57,10 +64,12 @@ def create_app(test_config=None):
     ###Routes###
     ############
     @app.route('/')
+    @cache.cached(timeout=2)  # Agressive cache timeout.
     def root():
         return "API Main.  Use */api/predict/"
 
     @app.route('/api/predict/', methods=['GET'])
+    @cache.cached(timeout=10)  # Agressive cache timeout.
     def predict():
         # Set Defaults
 
