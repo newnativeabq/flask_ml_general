@@ -15,7 +15,8 @@ from flask.cli import with_appcontext
 def get_db():
     """
     Returns current database connection.  If connection not present,
-    initiates connection to configured database.
+    initiates connection to configured database.  Default is non-authenticated SQL.
+    Modifty g.db = *connect to match intended database connection.
     """
     if 'db' not in g:
         try:

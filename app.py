@@ -7,13 +7,11 @@ import os
 # Import ML Library
 from ml_module import ml_model
 
-
 # Custom errors
 from errors import InvalidUsage
 
 # Logging
 import logging
-
 
 ###########
 ###Setup###
@@ -55,11 +53,9 @@ def create_app(test_config=None):
     import db
     db.init_app(app)
 
-
     ############
     ###Routes###
     ############
-
     @app.route('/')
     def root():
         return "API Main.  Use */api/predict/"
