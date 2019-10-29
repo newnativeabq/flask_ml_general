@@ -12,6 +12,10 @@ When committed, this repository is set to ignore the instance/ folder.  In that 
 
 The root route path is a landing page for API usage instructions.  Apparently this is a thing and should prbably be built out.
 
+### Logs in the Instance Folder
+
+You really need to manually create the instance folder to get logs in development.  By default, logs are saved to instance/logs/debug.log for safety reasons (don't accidentally want to push sensitive information).  Override the log save path in config.  Note that in heroku, those writes will not persist and you'll need to log to an external service (not currently supported) in production.
+
 ## TODO
 
 ### Generalize load_file

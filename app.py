@@ -1,9 +1,18 @@
 from flask import Flask, request, jsonify
 from flask import current_app, g
-from ml_module import ml_model
+from flask_cors import CORS
 import os
 
+# Import ML Library
+from ml_module import ml_model
+
+
+# Custom errors
 from errors import InvalidUsage
+
+# Logging
+import logging
+
 
 ###########
 ###Setup###
@@ -26,10 +35,12 @@ local_db_name = 'database_name.sqlite3'  # Change this or override with config.p
 def create_app(test_config=None):
     # Create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app)
     app.config.from_mapping(
         SECRET_KEY='dev',  # CHANGE THIS!!!!
         DATABASE=os.path.join(app.instance_path, local_db_name),
-        LOCALDATABASE=os.path.join(os.getcwd(), local_db_name)  # Attempt to fix pathing issues
+        LOCALDATABASE=os.path.join(os.getcwd(), local_db_name),  # Attempt to fix pathing issues
+        LOGFILE=os.path.join(app.instance_path, 'logs/debug.log'),
     )
 
     if test_config is None:
@@ -68,8 +79,16 @@ def create_app(test_config=None):
 
         return prediction_data
 
+    #############
+    ###Logging###
+    #############
+    logging.basicConfig(filename=app.config['LOGFILE'], level=logging.DEBUG)
+    logging.getLogger('flask_cors').level = logging.DEBUG
 
-    # Register error handler
+
+    ############################
+    ###Register Error Handles###
+    ############################
     @app.errorhandler(InvalidUsage)
     def handle_invalid_usage(error):
         response = jsonify(error.to_dict())
