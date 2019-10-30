@@ -2,6 +2,18 @@
 
 A deployable flask application tailored for production machine learning.  Contains drop-in model loading, logging pre-configured, and other useful features.  This is not meant to be a REST API and includes no data security or auth.  This is meant to be a lightweight deployable API to drop a model in and get connected to a front-end or dashboard quickly with regular, reliable, JSON responses.
 
+**Features** include:
+
+* Databaes connection manager
+
+* Machine Learning Model loader and factory methods
+
+* Caching
+
+* CORS headers
+
+* Root landing page (rendering this README.md)
+
 ## Usage
 
 ### Making Requests
@@ -35,3 +47,11 @@ You can change this to DEBUG by modifying the following line:
 > logging.basicConfig(filename=app.config['LOGFILE'], level=logging.INFO) **logging.INFO to logging.DEBUG**
 
 > Change default save location by modifying the filename attribute in line referenced above.  **filename=<insert_filename_here>**
+
+#### Special Thanks
+
+It can be hard to get eyes on a project to guide it's feature development.  I want to give special thanks to the data scientists who took a minute to walk through pain points and features they'd like to see.  Got most of it in.
+
+* Harsh Desai
+* John Morrison
+* Han Lee
