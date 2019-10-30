@@ -136,6 +136,9 @@ class Model():
         self.logger = logging.getLogger(__name__+'.Model')
         self.logger.info('Model instance created with given estimator')
 
+    def predict(self, input_string):
+        raise NotImplementedError
+
 
 class Vectorizer():
     def __init__(self):
@@ -173,8 +176,8 @@ def get_abs_path(filename, **kwargs):
         )
 
 
-def load_file(file_key):
-    # Load picke file.
+def load_file(file_key, file_type=None):
+    # Load pickle file.
     logger = logging.getLogger(__name__+'.load_file')
     logger.info('Attempting to load file with key: {}'.format(file_key))
     try:
@@ -183,5 +186,5 @@ def load_file(file_key):
         return opened
     except KeyError:
         print('Could not load {}.  Parameter not defined'.format(file_key))
-        logger.info('Could not load {}.  Parameter not defined'.format(file_key))
+        logger.error('Could not load {}.  Parameter not defined'.format(file_key))
         return None

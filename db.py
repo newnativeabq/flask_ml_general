@@ -5,11 +5,13 @@ Database
 """
 
 
-import sqlite3
+from sqlalchemy import create_engine
 
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+
+import logging
 
 
 def get_db():
@@ -18,20 +20,16 @@ def get_db():
     initiates connection to configured database.  Default is non-authenticated SQL.
     Modifty g.db = *connect to match intended database connection.
     """
+    db_logger = logging.getLogger(__name__ + '.getdb')
     if 'db' not in g:
+        db_logger.info('DB connection not found. Attempting connection.')
         try:
-            g.db = sqlite3.connect(
-                current_app.config['DATABASE'],
-                detect_types=sqlite3.PARSE_DECLTYPES,
-            )
+            engine = create_engine(current_app.config['DATABASE'])
+            g.db = engine.connect()
 
         except:
-            g.db = sqlite3.connect(
-                current_app.config['LOCALDATABASE'],
-                detect_types=sqlite3.PARSE_DECLTYPES,
-            )
-
-        g.db.row_factory = sqlite3.Row
+            db_logger.error('Could not establish connection.  Aborting.')
+            raise ConnectionError
 
     return g.db
 
