@@ -127,5 +127,6 @@ app = create_app()
 
 if __name__ == "__main__":
     # Bind to PORT if defined, otherwise default to 5000.
+    #  Run app.py.  Comment below out for Docker.
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
