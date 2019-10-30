@@ -60,6 +60,7 @@ def create_app(test_config=None):
     @app.route('/')
     @cache.cached(timeout=2)  # Agressive cache timeout.
     def root():
+        # Check if README.md exists and render as HTML if present
         if os.path.isfile('README.md'):
             return render_markdown('README.md')
         return "README.md Not Found.  This is API Main.  Use */api/predict/"
@@ -68,14 +69,20 @@ def create_app(test_config=None):
     @cache.cached(timeout=10)  # Agressive cache timeout.
     def predict():
         # Set Defaults
-
+        defaults = None
         # Parse request
         if request.method == 'GET':
             if not 'search' in request.args:
                 raise InvalidUsage(message="Search query not provided")
 
+        # Check for hard-coded defaults.  Suggest loading defaults via function/env
+        #   to activate/deactivate static response testing.
+        if defaults is not None:
+            model_input = defaults
+        else:
+            model_input = request.args['search']
         # Send search request to model
-        raw_prediction = predictor.predict(request.args['search'])
+        raw_prediction = predictor.predict(model_input)
         # Query database with those raw model output (if necessary)
         prediction_data = db.query_database(raw_prediction)
 
