@@ -3,6 +3,7 @@ from flask import current_app, g
 from flask_cors import CORS
 from flask_caching import Cache
 from decouple import config
+from markdown2 import Markdown
 import os
 
 # Custom errors
@@ -16,7 +17,7 @@ import logging
 ###########
 
 # Set database name
-local_db_name = 'database_name.sqlite3'  # Change this or override with config.py file in instance/
+local_db_name = ''  # Change this or override with config.py file in instance/
 
 #########################
 ###Application Factory###
@@ -59,7 +60,9 @@ def create_app(test_config=None):
     @app.route('/')
     @cache.cached(timeout=2)  # Agressive cache timeout.
     def root():
-        return "API Main.  Use */api/predict/"
+        if os.path.isfile('README.md'):
+            return render_markdown('README.md')
+        return "README.md Not Found.  This is API Main.  Use */api/predict/"
 
     @app.route('/api/predict/', methods=['GET'])
     @cache.cached(timeout=10)  # Agressive cache timeout.
@@ -103,6 +106,13 @@ def create_app(test_config=None):
         return response
 
     return app
+
+def render_markdown(filename):
+    # Convert markdown file to HTML for rendering
+    with open(filename, 'rb') as f:
+        html = Markdown().convert(f.read())
+
+    return html
 
 
 app = create_app()
