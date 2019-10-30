@@ -20,11 +20,11 @@ A deployable flask application tailored for production machine learning.  Contai
 
 ### Instance Folder
 
-When committed, this repository is set to ignore the instance/ folder.  In that folder should be your config.py (if used) file with any sensitive data.  Do not commit config.py with any API keys or database URIs.  Also in the instance/ folder should be a logs folder.  If nothing, create the following in your local root directory: instance/logs/debug.log.  Otherwise, the application will throw an error that debug.log doesn't exist.
+When committed, this repository is set to ignore the instance/ folder via .gitignore.  In development, Flask app can read from the location, but take care to not commit config.py with any API keys or database URIs.  To get logs, create the instance/logs/debug.log file.  Otherwise, the application will throw an error that debug.log doesn't exist.  See 'logging' for more details.
 
 ### Predefined Routes
 
-The root route path is a landing page for API usage instructions.  Apparently this is a thing and should prbably be built out.
+The root route path is a rendered version of the README.md file unless otherwise specified.  See app.py or the Usage section above for information on accessing functioning endpoints.
 
 ### Logging
 
@@ -33,3 +33,5 @@ Logging is enabled by default at the INFO level.  Logs are written to instance/l
 You can change this to DEBUG by modifying the following line:
 
 > logging.basicConfig(filename=app.config['LOGFILE'], level=logging.INFO) **logging.INFO to logging.DEBUG**
+
+> Change default save location by modifying the filename attribute in line referenced above.  **filename=<insert_filename_here>**
